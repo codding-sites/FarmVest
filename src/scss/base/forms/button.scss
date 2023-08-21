@@ -1,0 +1,62 @@
+//<BUTTONS (a.btn+tab)>
+// Сніппет (HTML): btn
+
+.button {
+	padding: rem(19.75) rem(25);
+	display: inline-block;
+	box-sizing: border-box;
+	font-weight: 500;
+	align-self: center;
+	justify-self: center;
+	text-align: center;
+	line-height: math.div(22, 18);
+	border-radius: rem(10);
+	background-color: $greenColor;
+	transition: all 0.3s ease 0s;
+	border: rem(1) solid $greenColor;
+	@media (max-width: $mobileSmall){
+		@include adaptiveValue("padding-top", 19.75, 13);
+		@include adaptiveValue("padding-bottom", 19.75, 13);
+		@include adaptiveValue("padding-right", 25, 16);
+		@include adaptiveValue("padding-left", 25, 16);
+	}
+	@media (any-hover: hover) {
+		&:hover {
+			border: rem(1) solid $mainColor;
+		}
+	}
+	html.light & {
+		color: $mainColor;
+		background-color: $greenColorTwo;
+		border: rem(1) solid $greenColorTwo;
+		@media (any-hover: hover) {
+			&:hover {
+				border: rem(1) solid $mainColor;
+			}
+		}
+	}
+	&_border {
+		background-color: transparent;
+		border: rem(1) solid $mainColor;
+		html.light & {
+			background-color: transparent;
+			color: $darkColor;
+			border: rem(1) solid $darkColor;
+			@media (any-hover: hover) {
+				&:hover {
+					border: rem(1) solid $greenColor;
+					background-color: transparent;
+				}
+			}
+		}
+		@media (any-hover: hover) {
+			&:hover {
+				border: rem(1) solid $greenColor;
+				background-color: transparent;
+			}
+		}
+	}
+	&._fw {
+		width: 100%;
+	}
+}

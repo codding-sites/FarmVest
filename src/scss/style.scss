@@ -1,0 +1,997 @@
+@use "sass:math";
+
+// Підключення міксинів ===========================================================================================================================================================================================================================================================================
+@import "base/mixins";
+
+// Підключення шрифтів ===========================================================================================================================================================================================================================================================================
+//&display=swap - додати при підключенні через плагін
+@import url('https://fonts.googleapis.com/css?family=League+Spartan:regular,500,700&display=swap');
+
+// Підключити, якщо є локальні файли шрифтів
+//@import "fonts/fonts";
+
+// Підключення іконкових шрифтів ==============================================================================================================================================================================================================================================================================
+// Підключити, якщо є файл іконкового шрифту
+//@import "fonts/icons";
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// Налаштування шаблону ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// За замовчуванням шрифт ==============================================================================================================================================================================================================================================================================
+$fontFamily: "League Spartan";
+$fontSize: rem(18); // де 14(px) - розмір шрифту за замовчуванням з макету
+
+// Основні кольори
+$mainColor: #fff; // Колір шрифту за замовчуванням
+$greenColor: #23B123;
+$greenColorTwo: #008000;
+$darkColor: #263238;
+
+// Палітра кольорів
+// @import "base/colors-palette";
+
+// Налаштування адаптивної сітки ===============================================================================================================================================================================================================================================================================================
+
+// Мінімальна ширина сторінки
+$minWidth: 320;
+// Ширина полотна (макету)
+$maxWidth: 1920;
+// Ширина обмежуючого контейнера (0 = немає обмеження)
+$maxWidthContainer: 1620;
+$maxWidthContainerTwo: 1420;
+// Загальний відступ у контейнера
+// (30 = по 15px ліворуч і праворуч, 0 = немає відступу)
+$containerPadding: 30;
+
+// Ширина спрацьовування першого брейкпоінту
+$containerWidth: $maxWidthContainer + $containerPadding;
+$containerWidthTwo: $maxWidthContainerTwo + $containerPadding;
+
+// Брейк-поїнти
+$pc: em($containerWidth); // ПК, ноутбуки, деякі планшети у горизонтальному положенні
+$tablet: em(991.98); // Планшети, деякі телефони в горизонтальному положенні
+$mobile: em(767.98); // Телефони L
+$mobileSmall: em(479.98); // Телефони S
+
+// Тип адаптива:
+// 1 = чуйність (у контейнера немає брейкпоінтів),
+// 2 = по брейк-поїнт (контейнер змінює свою ширину по брейк-поїнт)
+$responsiveType: 1;
+
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+// ============================================================================================================================================================================================================================================================================================================================================================================================
+
+// Обнулення ============================================================================================================================================================================================== =============================================================================================== ===============================================================================================
+@import "base/null";
+
+// Стилі тега BODY ============================================================================================================================================================================================================================================================================================================================================================================================
+body {
+	background-color: $darkColor;
+	line-height: math.div(32, 18);
+	@include adaptiveValue("font-size", 18, 16);
+	// Скролл заблоковано
+	.lock & {
+		overflow: hidden;
+		touch-action: none;
+		overscroll-behavior: none;
+	}
+	// Сайт завантажений
+	.loaded & {
+	}
+}
+// Оболонка wrapper ============================================================================================================================================================================================================================================================================================================================================================================================================================================
+.wrapper {
+	min-height: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	@supports (overflow: clip) {
+		overflow: clip;
+	}
+	// Притискаємо footer
+	> main {
+		flex: 1 1 auto;
+	}
+	// Фікс для слайдерів
+	> * {
+		min-width: 0;
+	}
+}
+// Обмежуючий контейнер ======================================================================================================================================================================================================================
+/*
+(i) Стилі будуть застосовуватись до
+всіх класів, що містять *__container
+Наприклад header__container, main__container і т.п.
+Сніппет (HTML): cnt
+*/
+
+@if ($responsiveType==1) {
+	// Чуйна
+	[class*="__container"] {
+		max-width: rem(1420);
+		@if ($maxWidthContainerTwo>0) {
+			max-width: rem($containerWidthTwo);
+			margin: 0 auto;
+		}
+		@if ($containerPadding>0) {
+			@if ($maxWidthContainerTwo>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			} @else {
+				@include adaptiveValue("padding-left", math.div($containerPadding, 2), 15);
+				@include adaptiveValue("padding-right", math.div($containerPadding, 2), 15);
+			}
+		}
+	}
+} @else {
+	// Брейк-поїнтами
+	[class*="__container"] {
+		margin: 0 auto;
+		@if ($maxWidthContainerTwo>0) {
+			max-width: rem($containerWidthTwo);
+		} @else {
+			@if ($containerPadding>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+		@media (max-width: $pc) {
+			max-width: rem(970);
+		}
+		@media (max-width: $tablet) {
+			max-width: rem(750);
+		}
+		@media (max-width: $mobile) {
+			max-width: none;
+			@if ($containerPadding>0 and $maxWidthContainerTwo>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+	}
+}
+
+@if ($responsiveType==1) {
+	// Чуйна
+	[class*="__container-big"] {
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+			margin: 0 auto;
+		}
+		@if ($containerPadding>0) {
+			@if ($maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			} @else {
+				@include adaptiveValue("padding-left", math.div($containerPadding, 2), 15);
+				@include adaptiveValue("padding-right", math.div($containerPadding, 2), 15);
+			}
+		}
+	}
+} @else {
+	// Брейк-поїнтами
+	[class*="__container-big"] {
+		margin: 0 auto;
+		@if ($maxWidthContainer>0) {
+			max-width: rem($containerWidth);
+		} @else {
+			@if ($containerPadding>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+		@media (max-width: $pc) {
+			max-width: rem(970);
+		}
+		@media (max-width: $tablet) {
+			max-width: rem(750);
+		}
+		@media (max-width: $mobile) {
+			max-width: none;
+			@if ($containerPadding>0 and $maxWidthContainer>0) {
+				padding: 0 rem(math.div($containerPadding, 2));
+			}
+		}
+	}
+}
+
+// Підключення базових стилів, шаблонів (заготівель) та допоміжних класів
+// Для підключення/вимкнення конкретних стилів дивись base.scss
+@import "base";
+
+// Підключення стилів загальних елементів проекту
+@import "common";
+
+// Підключення стилів окремих блоків
+@import "header";
+@import "footer";
+
+// Підключення стилів окремих сторінок
+@import "home";
+
+//Main-Block====================================================================================================
+.main-block {
+   // .main-block__container-big
+   &__container-big {
+      @include adaptiveValue("padding-top", 251, 80);
+      @include adaptiveValue("padding-bottom", 104.5, 25);
+      position: relative;
+   }
+   // .main-block__container
+   &__container {
+      padding: 0;
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 10);
+      }
+   }
+   // .main-block__block-text
+   &__block-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 69, 10);
+      }
+   }
+   // .main-block__title
+   &__title {
+      max-width: rem(820);
+   }
+   // .main-block__text
+   &__text {
+      max-width: rem(575);
+   }
+   // .main-block__form
+   &__form {
+      @extend %animate;
+      transition: all 0.65s ease 0.2s !important;
+   }
+   // .main-block__input
+   &__input {
+   }
+   // .main-block__button
+   &__button {
+      min-width: rem(163);
+   }
+   // .main-block__icons
+   &__icons {
+   }
+}
+.icons-main-block {
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   top: 0;
+   left: 0;
+   pointer-events: none;
+   @media (max-width: $mobile){
+      opacity: 0.15;
+      html.light & {
+         opacity: 0.25;
+      }
+   }
+   // .icons-main-block__circle
+   &__circle {
+      top: 0;
+      left: 0;
+      // .icons-main-block__circle_1
+      &_1 {
+         &::before{
+            content:'';
+            transform: translate(calc(-50% - rem(28.5)), calc(-50% + rem(85.5)));
+         }
+      }
+      // .icons-main-block__circle_2
+      &_2 {
+         &::before{
+            content:'';
+            transform: translate(calc(-50% + rem(23.5)), calc(-50% + rem(31.5)));
+         }
+      }
+   }
+   // .icons-main-block__item
+   &__item {
+      position: absolute;
+      html.dark & {
+         display: block;
+      }
+      html.light & {
+         display: none;
+      }
+      &_light {
+         html.dark & {
+            display: none;
+         }
+         html.light & {
+            display: block;
+         } 
+      }
+      // .icons-main-block__item_1
+      &_1 {
+         top: percent(685, 878);
+         left: rem(15);
+      }
+      // .icons-main-block__item_2
+      &_2 {
+         top: percent(379, 878);
+         left: percent(234,1620);
+      }
+      // .icons-main-block__item_3
+      &_3 {
+         top: percent(757, 878);
+         left: percent(400, 1620);
+      }
+      // .icons-main-block__item_4
+      &_4 {
+         top: percent(134, 878);
+         left: percent(1156, 1620);
+      }
+      // .icons-main-block__item_5
+      &_5 {
+         top: percent(419, 878);
+         left: percent(1322, 1620);
+      }
+      // .icons-main-block__item_6
+      &_6 {
+         top: percent(776, 878);
+         left: percent(1318, 1620);
+      }
+      // .icons-main-block__item_7
+      &_7 {
+         top: percent(367, 878);
+         right: rem(15);
+      }
+   }
+}
+//Companies====================================================================================================
+.companies {
+   @include adaptiveValue("padding-top", 104.5, 25);
+   @include adaptiveValue("padding-bottom", 100, 25);
+   // .companies__container
+   &__container {
+   }
+   // .companies__items
+   &__items {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: rem(20);
+      align-items: center;
+      justify-content: center;
+      @include adaptiveValue("margin-left", -54, -15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("margin-right", -54, -15, 0, $containerWidth, 767.98);
+      &>* {
+         @extend %animateTwo;
+      }
+   }
+   // .companies__item
+   &__item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 1 20%;
+      @include adaptiveValue("padding-left", 54, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-right", 54, 15, 0, $containerWidth, 767.98);
+      html.dark & {
+         display: block;
+      }
+      html.light & {
+         display: none;
+      }
+      &_light {
+         html.dark & {
+            display: none;
+         }
+         html.light & {
+            display: block;
+         }
+      }
+      img {
+         max-width: 100%;
+      }
+      @media (max-width: $mobile){
+         flex: 0 1 33.333%;
+      }
+      @media (max-width: $mobileSmall){
+         flex: 0 1 50%;
+      }
+   }
+}
+//Works====================================================================================================
+.works {
+   @include adaptiveValue("padding-top", 100, 30);
+   @include adaptiveValue("padding-bottom", 100, 30);
+   // .works__container
+   &__container {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(25);
+   }
+   // .works__body
+   &__body {
+      display: grid;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 96, 20, 0, $containerWidth, 767.98);
+      grid-template-columns: 1fr percent(750,1420);
+      @media (max-width: $mobile){
+         grid-template-columns: 1fr;
+      }
+   }
+   // .works__content
+   &__content {
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+      @media (max-width: $tablet){
+         padding-top: rem(50);
+      }
+      @media (max-width: $mobile){
+         padding-top: 0;
+      }
+   }
+   // .works__block-text
+   &__block-text {
+   }
+   // .works__title
+   &__title {
+   }
+   // .works__text
+   &__text {
+      max-width: rem(445);
+      @media (max-width: $mobile) {
+         max-width: none;
+      }
+   }
+   // .works__items
+   &__items {
+      justify-content: center;
+      @include adaptiveValue("padding-right", 155, 0, 0, $containerWidth, 767.98);
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+      @media (max-width: $tablet){
+         display: flex;
+         flex-wrap: wrap;
+         margin: 0 rem(-15);
+      }
+   }
+   // .works__item
+   &__item {
+      @extend %animate;
+   }
+   // .works__image
+   &__image {
+      @media (max-width: $mobile){
+         width: 100%;
+      }
+   }
+   // .works__circles
+   &__circles {
+      top: 0;
+      right: 0;
+   }
+   // .works__circle
+   &__circle {
+      top: 0;
+      right: 0;
+      // .works__circle_1
+      &_1 {
+         &::before{
+            content:'';
+            transform: translate(calc(50% + rem(17.5)), percent(-35,585));
+         }
+      }
+      // .works__circle_2
+      &_2 {
+         &::before {
+            content: '';
+            transform: translate(calc(50% + rem(17.5)), percent(-111, 585));
+         }
+      }
+   }
+}
+.item-works {
+   display: flex;
+   row-gap: rem(10);
+   @include adaptiveValue("column-gap", 32, 10);
+   @media (max-width: $tablet){
+      padding: 0 rem(15);
+      flex: 0 1 50%;
+      &:last-child {
+         &:nth-child(odd) {
+            flex: 0 1 50%;
+         }
+      }
+   }
+   @media (max-width: em(570)){
+      flex: 1 1 100%;
+   }
+   @media (max-width: $mobile){
+      flex-direction: column;
+      height: 100%;
+   }
+   // .item-works__icon-wrraper
+   &__icon-wrraper {
+      align-self: flex-start;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: rem(15);
+      @media (max-width: $mobile){
+         flex: 1 1 100%;
+      }
+   }
+   // .item-works__icon
+   &__icon {
+      flex: 0 0 auto;
+      @include adaptiveValue("padding", 27, 13.5, 0, $containerWidth, 767.98);
+      background-color: rgba(0, 128, 0, 0.10);
+      border-radius: 50%;
+      img {
+         @include adaptiveValue("width", 56, 30, 0, $containerWidth, 767.98);
+         @include adaptiveValue("height", 56, 30.5, 0, $containerWidth, 767.98);
+         max-width: 100%;
+      }
+   }
+   // .item-works__content
+   &__content {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 16, 15, 0, $containerWidth, 767.98);
+   }
+   // .item-works__title
+   &__title {
+      @include adaptiveValue("font-size", 20, 18, 0, $containerWidth, 767.98);
+      font-weight: 700;
+      line-height: math.div(22, 20);
+   }
+   // .item-works__text
+   &__text {
+      @include adaptiveValue("font-size", 18, 16, 0, $containerWidth, 767.98);
+      &>*:not(:last-child) {
+         margin-bottom: rem(5);
+      }
+   }
+}
+//Investment====================================================================================================
+.investment {
+   @include adaptiveValue("padding-top", 100, 30);
+   @include adaptiveValue("padding-bottom", 100, 30);
+   // .investment__container
+   &__container {
+      display: flex;
+      row-gap: rem(15);
+      justify-content: center;
+      @include adaptiveValue("column-gap", 126, 15, 0, $containerWidth, 767.98);
+      flex-direction: row-reverse;
+      @media (max-width: $mobile){
+         flex-direction: column;
+      }
+   }
+   // .investment__content
+   &__content {
+      flex: 0 1 percent(600, 1420);
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+      @media (max-width: $tablet){
+         flex: 0 1 percent(680, 1420);
+      }
+   }
+   // .investment__block-text
+   &__block-text {
+   }
+   // .investment__title
+   &__title {
+      @include adaptiveValue("font-size", 70, 28, 0, $containerWidth, 479.98);
+      max-width: rem(505);
+      @media (max-width: $pc){
+         max-width: none;
+      }
+   }
+   // .investment__text
+   &__text {
+      max-width: rem(450);
+      @media (max-width: $pc) {
+         max-width: none;
+      }
+   }
+   // .investment__spollers
+   &__spollers {
+   }
+   // .investment__image
+   &__image {
+      @include adaptiveValue("padding-top", 99, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-bottom", 99, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-right", 40, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-left", 40, 15, 0, $containerWidth, 767.98);
+      flex: 0 1 percent(694,1420);
+      @media (max-width: $mobile){
+         width: 100%;
+      }
+   }
+   // .investment__circles
+   &__circles {
+      bottom: 0;
+      left: 0;
+   }
+   // .investment__circle
+   &__circle {
+      bottom: 0;
+      left: 0;
+      // .investment__circle_1
+      &_1 {
+         &::before{
+            content:'';
+            transform: translate(calc(-50% + rem(58)), percent(39,585));
+         }
+      }
+      // .investment__circle_2
+      &_2 {
+         &::before {
+            transform: translate(calc(-50% + rem(58)), percent(116, 585));
+         }
+      }
+   }
+}
+.spollers {
+   display: flex;
+   flex-direction: column;
+   @include adaptiveValue("row-gap", 24, 15);
+   column-gap: rem(15);
+   // .spollers__item
+   &__item {
+      @include adaptiveValue("padding-top", 24, 15);
+      @include adaptiveValue("padding-bottom", 24, 15);
+      @include adaptiveValue("padding-right", 30, 15);
+      @include adaptiveValue("padding-left", 30, 15);
+      border-radius: rem(10);
+      background: rgba(255, 255, 255, 0.05);
+      @extend %animate;
+      html.light & {
+         background: rgba(0, 128, 0, 0.05);
+      }
+   }
+   // .spollers__title
+   &__title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: rem(15);
+      cursor: pointer;
+   }
+   // .spollers__title-value
+   &__title-value {
+      @include adaptiveValue("font-size", 24, 18, 0, $containerWidth, 767.98);
+      line-height: math.div(42, 24);
+   }
+   // .spollers__title-icon
+   &__title-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.5s ease 0s;
+      ._spoller-active & {
+         transform: rotate(-180deg);
+      }
+   }
+   // .spollers__body
+   &__body {
+      &>*:not(:last-child) {
+         margin-bottom: rem(5);
+      }
+   }
+}
+//Choose====================================================================================================
+.choose {
+   @include adaptiveValue("padding-top", 100, 30);
+   @include adaptiveValue("padding-bottom", 100, 30);
+   // .choose__container
+   &__container {
+      display: grid;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 177, 20, 0, $containerWidth, 767.98);
+      grid-template-columns: 1fr percent(680,1420);
+      @media (max-width: $mobile){
+         grid-template-columns: 1fr;
+      }
+   }
+   // .choose__content
+   &__content {
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+   }
+   // .choose__block-text
+   &__block-text {
+   }
+   // .choose__title
+   &__title {
+   }
+   // .choose__text
+   &__text {
+      max-width: rem(440);
+      @media (max-width: $pc){
+         max-width: none;
+      }
+   }
+   // .choose__list
+   &__list {
+   }
+   // .choose__image
+   &__image {
+      img {
+         border-radius: rem(20);
+         max-width: 100%;
+      }
+      @media (max-width: $mobile){
+         width: 100%;
+      }
+   }
+}
+.list-choose {
+   &>*:not(:last-child) {
+      @include adaptiveValue("margin-bottom", 48, 15);
+   }
+   // .list-choose__items
+   &__items {
+      @media (min-width: $mobile){
+         &>*:not(:last-child) {
+            @include adaptiveValue("margin-bottom", 48, 15);
+         }
+      }
+      @media (max-width: $mobile){
+         display: flex;
+         flex-wrap: wrap;
+         row-gap: rem(15);
+         margin: rem(0) rem(-7.5);
+      }
+   }
+   // .list-choose__item
+   &__item {
+      display: flex;
+      align-items: center;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 50, 15);
+      @media (max-width: $mobile){
+         padding: rem(0) rem(7.5);
+         flex: 0 1 50%;
+         &:last-child {
+            &:nth-child(odd) {
+               flex: 1 1 100%;
+            }
+         }
+      }
+      @media (max-width: em(600)){
+         flex: 1 1 100%;
+      }
+      @extend %animate;
+   }
+   // .list-choose__value
+   &__value {
+      flex: 0 0 auto;
+      @include adaptiveValue("width", 64, 42);
+      @include adaptiveValue("height", 64, 42);
+      @include adaptiveValue("font-size", 36, 26);
+      line-height: math.div(40, 20);
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      @media (min-width: $mobile){
+         align-items: center;
+      }
+      html.light & {
+         color: $greenColorTwo;
+         background-color: rgba(0, 128, 0, 0.10);
+      }
+   }
+   // .list-choose__label
+   &__label {
+      @include adaptiveValue("font-size", 20, 18);
+      line-height: math.div(22, 20);
+   }
+   // .list-choose__button
+   &__button {
+      padding: rem(22) rem(55);
+      @media (max-width: $mobileSmall) {
+         @include adaptiveValue("padding-top", 22, 14);
+         @include adaptiveValue("padding-bottom", 22, 14);
+         @include adaptiveValue("padding-right", 55, 36);
+         @include adaptiveValue("padding-left", 55, 36);
+      }
+   }
+}
+//Reviews====================================================================================================
+.reviews {
+   @include adaptiveValue("padding-top", 100, 30);
+   @include adaptiveValue("padding-bottom", 100, 30);
+   // .reviews__container
+   &__container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+   }
+   // .reviews__block-text
+   &__block-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+   }
+   // .reviews__title
+   &__title {
+   }
+   // .reviews__text
+   &__text {
+      max-width: rem(450);
+      @media (max-width: $pc){
+         max-width: none;
+      }
+   }
+   // .reviews__items
+   &__items {
+      display: flex;
+      row-gap: rem(15);
+      @include adaptiveValue("margin-left", -24, -7.5, 0, $containerWidth, 767.98);
+      @include adaptiveValue("margin-right", -24, -7.5, 0, $containerWidth, 767.98);
+      @media (max-width: $mobile){
+         flex-wrap: wrap;
+      }
+   }
+   // .reviews__item
+   &__item {
+      flex: 0 1 50%;
+      @include adaptiveValue("padding-left", 24, 7.5, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-right", 24, 7.5, 0, $containerWidth, 767.98);
+      @media (max-width: em(550)){
+         flex: 1 1 100%;
+      }
+      @extend %animate;
+   }
+   // .reviews__button
+   &__button {
+      padding: rem(13) rem(70);
+      @media (max-width: $mobileSmall) {
+         @include adaptiveValue("padding-right", 70, 46);
+         @include adaptiveValue("padding-left", 70, 46);
+      }
+      @extend %animate;
+   }
+}
+.item-reviews {
+   display: flex;
+   @media (max-width: $mobile){
+      flex-direction: column;
+   }
+   @media (max-width: em(550)){
+      margin: 0 rem(-15);
+   }
+   // .item-reviews__image
+   &__image-ibg {
+      flex: 0 1 percent(377,325);
+      padding-bottom: 55%;
+      img {
+         border-radius: rem(20) rem(0) 0px rem(20);
+         @media (max-width: $mobile){
+            border-radius: rem(20) rem(20) 0px rem(0);
+         }
+      }
+   }
+   // .item-reviews__content
+   &__content {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(15);
+      justify-content: space-between;
+      border-radius: 0 rem(20) rem(20) 0;
+      @include adaptiveValue("padding-top", 32, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-bottom", 32, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-right", 32, 15, 0, $containerWidth, 767.98);
+      @include adaptiveValue("padding-left", 32, 15, 0, $containerWidth, 767.98);
+      background-color: rgba(255, 255, 255, 0.05);
+      @media (max-width: $mobile){
+         border-radius: 0 rem(0) rem(20) rem(20);
+      }
+      html.light & {
+         background: rgba(0, 128, 0, 0.05);
+      }
+   }
+   // .item-reviews__text
+   &__text {
+      &>*:not(:last-child) {
+         margin-bottom: rem(5);
+      }
+   }
+   // .item-reviews__name
+   &__name {
+      font-weight: 700;
+   }
+}
+//Download===================================================================================================
+.download {
+   @include adaptiveValue("padding-top", 100, 30);
+   @include adaptiveValue("padding-bottom", 200, 60);
+
+   // .download__container
+   &__container {
+      overflow: hidden;
+      position: relative;
+      @include adaptiveValue("padding-top", 72, 15);
+      @include adaptiveValue("padding-bottom", 64, 15);
+      border-radius: rem(20);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      background-color: rgba(255, 255, 255, 0.07);
+
+      &>*:not(:last-child) {
+         @include adaptiveValue("margin-bottom", 48, 15);
+      }
+   }
+
+   // .download__block-text
+   &__block-text {}
+
+   // .download__title
+   &__title {
+      max-width: rem(615);
+   }
+
+   // .download__apps
+   &__apps {
+      display: flex;
+      row-gap: rem(15);
+      @include adaptiveValue("column-gap", 24, 15);
+      &>* {
+         @extend %animate;
+      }
+   }
+
+   // .download__app
+   &__app {
+      @include adaptiveValue("width", 168, 112);
+      img {
+         max-width: 100%;
+      }
+   }
+
+   // .donload__circles
+   &__circles {}
+
+   // .download__circle
+   &__circle {
+      &::before {
+         content: '';
+         border: rem(1) solid rgba(255, 255, 255, 0.37);
+      }
+
+      // .download__circle_1
+      &_1 {
+         &::before {
+            content: '';
+            transform: translate(-50%, percent(-111, 585));
+         }
+      }
+
+      // .download__circle_2
+      &_2 {
+         &::before {
+            content: '';
+            transform: translate(-50%, percent(-35, 585));
+         }
+      }
+   }
+}
+//====================================================================================================

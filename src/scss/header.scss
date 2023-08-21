@@ -1,0 +1,233 @@
+.menu-open {
+	.menu__body {
+		left: 0;
+		&::after {
+			left: 0;
+			visibility: visible;
+			opacity: 1;
+		}
+	}
+}
+//====================================================================================================
+.header {
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	z-index: 50;
+	&._header-scroll {
+		background-color: rgba(0, 0, 0, 0.85);
+		html.light & {
+			background-color: rgba(255, 255, 255, 0.91);
+		}
+		.header__container-big {
+			padding: rem(15) rem(15);
+			@media (max-width: $mobile){
+				padding: rem(10) rem(15);
+			}
+		}
+	}
+	@extend %animate;
+	// .header__container-big
+	&__container-big {
+		padding: rem(60.25) rem(15);
+		@include adaptiveValue("padding-top", 60.25, 10);
+		@include adaptiveValue("padding-bottom", 60.25, 10);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		row-gap: rem(15);
+		column-gap: rem(20);
+		transition: all 0.3s ease 0s;
+	}
+	// .header__logo
+	&__logo {
+		html.dark &{
+			display: flex;
+		}
+		html.light & {
+			display: none;
+		}
+		&_light {
+			html.dark & {
+				display: none;
+			}
+			html.light & {
+				display: flex;
+			}
+		}
+		position: relative;
+		z-index: 2;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		@include adaptiveValue("width", 143, 95);
+		flex: 0 0 auto;
+		img {
+			max-width: 100%;
+		}
+	}
+	// .header__menu
+	&__menu {
+	}
+}
+.menu {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	@include adaptiveValue("column-gap", 310, 20, 0, $containerWidth, 767.98);
+	// .menu__icon
+	&__icon {
+		display: none;
+	}
+	// .menu__body
+	&__body {
+	}
+	// .menu__list
+	&__list {
+		display: flex;
+		flex-wrap: wrap;
+		@include adaptiveValue("column-gap", 43, 20, 0, $containerWidth, 767.98);
+		@media (min-width: $mobile){
+			row-gap: rem(15);
+		}
+	}
+	// .menu__item
+	&__item {
+	}
+	// .menu__link
+	&__link {
+		line-height: math.div(22, 18);
+		transition: all 0.3s ease 0s;
+		&:hover{
+			color: $greenColor;
+		}
+	}
+	// .menu__actions
+	&__actions {
+		flex: 0 0 auto;
+		position: relative;
+		z-index: 2;
+		display: flex;
+		align-items: center;
+		@include adaptiveValue("column-gap", 16, 15, 0, $containerWidth, 767.98);
+	}
+	// .menu__button
+	&__button {
+		@include adaptiveValue("padding-top", 19.75, 9.875);
+		@include adaptiveValue("padding-bottom", 19.75, 9.875);
+		@include adaptiveValue("padding-right", 25, 12.5);
+		@include adaptiveValue("padding-left", 25, 12.5);
+		flex: 0 0 auto;
+		min-width: rem(142);
+		@media (max-width: $pc){
+			min-width: 0;
+		}
+		@media (max-width: $mobile){
+			align-self: end;
+		}
+	}
+
+	@media (max-width: $mobile){
+		&__body {
+			@include adaptiveValue("padding-top", 140, 80, 0, 767.98);
+			padding-bottom: rem(30);
+			@include adaptiveValue("padding-left", 50, 30);
+			@include adaptiveValue("padding-right", 50, 30);
+			position: fixed;
+			width: 100%;
+			height: 100vh;
+			top: 0;
+			left: -100%;
+			background-color: $darkColor;
+			overflow: auto;
+			transition: all 0.3s ease 0s;
+			html.light & {
+				background-color: $mainColor;
+			}
+			&::after {
+				content: '';
+				position: fixed;
+				width: 100%;
+				@include adaptiveValue("height", 184, 63.75);
+				top: 0;
+				left: -100%;
+				background-color: #000;
+				transition: all 0.3s ease 0s;
+				visibility: hidden;
+				opacity: 0;
+				html.light & {
+					background-color: $mainColor;
+				}
+			}
+		}
+		&__list {
+			flex-direction: column;
+			align-items: end;
+			&>*:not(:last-child) {
+				@include adaptiveValue("margin-bottom", 45, 35);
+			}
+		}
+		&__link {
+			font-size: rem(30);
+			color: $mainColor;
+			html.light & {
+				color: $darkColor;
+			}
+		}
+	}
+}
+//====================================================================================================
+//Burger
+.icon-menu {
+	display: none;
+	@media (max-width: $mobile) {
+		display: block;
+		position: relative;
+		width: rem(30);
+		height: rem(18);
+		z-index: 5;
+		@media (any-hover: none) {
+			cursor: default;
+		}
+		span,
+		&::before,
+		&::after {
+			content: "";
+			transition: all 0.3s ease 0s;
+			right: 0;
+			position: absolute;
+			width: 100%;
+			height: rem(2);
+			background-color: $mainColor;
+			html.light & {
+				background-color: $darkColor;
+			}
+		}
+		&::before {
+			top: 0;
+		}
+		&::after {
+			bottom: 0;
+		}
+		span {
+			top: calc(50% - rem(1));
+		}
+		.menu-open & {
+			span {
+				width: 0;
+			}
+			&::before,
+			&::after {
+			}
+			&::before {
+				top: calc(50% - rem(1));
+				transform: rotate(-45deg);
+			}
+			&::after {
+				bottom: calc(50% - rem(1));
+				transform: rotate(45deg);
+			}
+		}
+	}
+}

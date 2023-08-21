@@ -1,0 +1,150 @@
+// Заголовки, загальні БЕМ блоки та інше...
+//Animate========================================================================================================================================================
+%animate {
+   transform: translate(0, -30px);
+   opacity: 0;
+   &._watcher-view {
+      transform: translate(0, 0);
+      opacity: 1;
+      transition: all 0.65s ease 0s;
+   }
+}
+%animateTwo {
+   transform: translate(0, -30px);
+   opacity: 0;
+   &._watcher-view {
+      transform: translate(0, 0);
+      opacity: 1;
+      @for $var from 1 to 50 {
+         $delay: $var * 0.1 - 0.1;
+         &:nth-child(#{$var}) {
+            @if $var == 1 {
+               transition: all 0.65s ease 0s;
+            } @else {
+               transition: all 0.65s ease #{$delay + s};
+            }
+         }
+      }
+   }
+}
+//Block-Text====================================================================================================
+.block-text {
+   &>*:not(:last-child) {
+      @include adaptiveValue("margin-bottom", 32, 10);
+   }
+   &>* {
+      @extend %animateTwo;
+   }
+   // .block-text__title
+   &__title {
+      @include adaptiveValue("font-size", 70, 28);
+      font-weight: 700;
+      line-height: math.div(78, 70);
+      // .block-text__title_green
+      span {
+         color: $greenColor;
+         html.light & {
+            color: $greenColorTwo;
+         }
+      }
+      // .block-text__title_medium
+      &_medium {
+         @include adaptiveValue("font-size", 64, 28);
+         line-height: math.div(72, 64);
+      }
+      // .block-text__title_little
+      &_little {
+         @include adaptiveValue("font-size", 56, 28);
+         line-height: math.div(63, 56);
+      }
+   }
+   // .block-text__text
+   &__text {
+      @include adaptiveValue("font-size", 18, 16);
+      &>*:not(:last-child) {
+         margin-bottom: rem(5);
+      }
+   }
+}
+//Circle====================================================================================================
+.circles {
+   position: absolute;
+}
+
+.circle {
+   position: absolute;
+   z-index: -2;
+   @include adaptiveValue("width", 585, 292.5);
+   @include adaptiveValue("height", 585, 292.5);
+   &::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: rem(1) solid $mainColor;
+      background-color: transparent;
+      border-radius: 50%;
+      html.light & {
+         border: rem(1) solid $greenColorTwo;
+      }
+   }
+}
+//Block-Image====================================================================================================
+.block-image {
+   position: relative;
+   @include adaptiveValue("padding-top", 166, 15, 0, $containerWidth, 767.98);
+   @include adaptiveValue("padding-bottom", 166, 15, 0, $containerWidth, 767.98);
+   @include adaptiveValue("padding-right", 45, 15, 0, $containerWidth, 767.98);
+   @include adaptiveValue("padding-left", 45, 15, 0, $containerWidth, 767.98);
+   border-radius: rem(20);
+   background-color: rgba(255, 255, 255, 0.05);
+   overflow: hidden;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   align-self: start;
+   img {
+      border-radius: rem(20);
+      max-width: 100%;
+   }
+}
+//====================================================================================================
+.theme {
+   // .theme__action
+   &__action {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+   }
+   // .theme__color
+   &__color {
+      @include adaptiveValue("width", 30, 25);
+      @include adaptiveValue("height", 30, 25);
+      flex: 0 0 auto;
+      cursor: pointer;
+   }
+}
+body {
+   transition: all 0.3s ease 0s;
+   color: $mainColor;
+   background-color: $darkColor;
+}
+html.dark body {
+   color: $mainColor;
+   background-color: $darkColor;
+}
+html.light body {
+   background-color: $mainColor;
+   color: $darkColor;
+}
+html.dark .theme__color {
+   background: url('@img/theme/sun.svg') 0 0 / 100% no-repeat;
+}
+html.light .theme__color {
+   background: url('@img/theme/moon.svg') 0 0 / 100% no-repeat;
+}
+//====================================================================================================
+
+//====================================================================================================
+
+//====================================================================================================

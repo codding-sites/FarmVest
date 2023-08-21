@@ -1,0 +1,97 @@
+//<FORM>
+// Сніппет (HTML):
+.form {
+	position: relative;
+	padding: rem(6);
+	max-width: rem(533);
+	display: flex;
+	row-gap: rem(10);
+	column-gap: rem(5);
+	background-color: $mainColor;
+	border-radius: rem(10);
+	border: rem(1) solid #FFF;
+	html.light & {
+		background: rgba(38, 50, 56, 0.10);
+	}
+	&._form-error {
+		border: rem(1) solid red;
+	}
+	@media (max-width: $mobileSmall){
+		width: 100%;
+		max-width: none;
+		flex-direction: column;
+	}
+	&__row {
+	}
+	&__column {
+	}
+	&__line {
+	}
+	&__input {
+		flex: 1 1 auto;
+		padding: rem(22) rem(5) rem(22) rem(19);
+		@include adaptiveValue("padding-left", 19, 5);
+		color: $darkColor;
+		line-height: math.div(20, 18);
+		background-color: transparent;
+		&::placeholder {
+			color: $darkColor;
+		}
+		@media (max-width: $mobileSmall){
+			padding: rem(10) rem(5);
+		}
+	}
+	&__button {
+		@media (max-width: $mobileSmall){
+			width: 100%;
+			flex: 1 1 100%;
+		}
+	}
+	&__error {
+		@include adaptiveValue("padding-left", 26, 10);
+		position: absolute;
+		top: 100%;
+		left: 0;
+		color: red;
+		@media (max-width: $mobileSmall){
+			top: 60%;
+		}
+	}
+}
+//</FORM>
+
+// <BUTTONS>
+// Сніппет (HTML): btn
+@import "button";
+
+// <INPUTS>
+// Сніппет (HTML): inp
+@import "input";
+
+// <CHECK>
+// Сніппет (HTML): chk
+// @import "checkbox";
+
+// <RADIO>
+// Сніппет (HTML): opt
+// @import "radio";
+
+// <SELECT>
+// Сніппет (HTML): sel
+// @import "select";
+
+// <RATING>
+// Сніппет (HTML): rating
+// @import "rating";
+
+// <QUANTITY>
+// Сніппет (HTML): qa
+// @import "quantity";
+
+// <RANGE>
+// Сніппет (HTML):
+// @import "range";
+
+// <CALENDAR>
+// Сніппет (HTML):
+// @import "datepicker";
